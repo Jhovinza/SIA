@@ -26,8 +26,8 @@
           <td>{{ registro.telefono }}</td>
           <td>{{ registro.correo }}</td>
           <td>{{ registro.plan_reciclaje }}</td>
-          <td><a class="btn btn-light btn-sm" href="">Modificar</a>
-              <a class="btn btn-light btn-sm" href="">Eliminar</a> </td>
+          <td><a class="btn btn-light btn-sm" href="{% url 'modificarClientes' registro.id_cliente %}">Modificar</a>
+              <a class="btn btn-light btn-sm" href="{% url 'eliminarClientes' registro.id_cliente %}">Eliminar</a> </td>
         </tr>
       {% endfor %}
       </tbody>

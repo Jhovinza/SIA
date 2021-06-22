@@ -20,8 +20,8 @@
           <td>{{ registro.nombre_plan }}</td>
           <td>{{ registro.valor_plan }}</td>
           <td>{{ registro.num_retiros }}</td>
-          <td><a class="btn btn-light btn-sm" href="">Modificar</a>
-              <a class="btn btn-light btn-sm" href="">Eliminar</a> </td>
+          <td><a class="btn btn-light btn-sm" href="{% url 'modificarPlanes' registro.id_plan %}">Modificar</a>
+              <a class="btn btn-light btn-sm" href="{% url 'eliminarPlanes' registro.id_plan %}">Eliminar</a> </td>
         </tr>
       {% endfor %}
       </tbody>
