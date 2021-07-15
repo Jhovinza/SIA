@@ -1,10 +1,12 @@
 from django.urls import path
 from Aplicación1.views import Aplicación1, listaClientes, agregarClientes, listaPlanes, agregarPlanes, \
-    modificarClientes, eliminarClientes, modificarPlanes, eliminarPlanes,  listaEntregas, render_pdf_view
+    modificarClientes, eliminarClientes, modificarPlanes, eliminarPlanes,  listaEntregas, inicio
 
 
 urlpatterns = [
     path("", Aplicación1),
+    path('home/', inicio, name='home'),
+
 
     path('clientes/', listaClientes, name='clientes'),
     path('agregarClientes/', agregarClientes, name='agregarClientes'),
@@ -23,7 +25,7 @@ urlpatterns = [
 
     path('entregas1/', listaEntregas.as_view(), name="entregas1"),
 
-    path('lista/', render_pdf_view, name='lista'),
+
 
 ]
 

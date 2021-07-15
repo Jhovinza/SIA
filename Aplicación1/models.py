@@ -1,6 +1,6 @@
 import recurrence
 from django.db import models
-from recurrence import *
+from recurrence import fields
 
 # Create your models here.
 class Plan_reciclaje(models.Model):
@@ -8,6 +8,7 @@ class Plan_reciclaje(models.Model):
     nombre_plan = models.CharField(max_length=30, null=False, blank=False)
     valor_plan = models.IntegerField(null=False, blank=False)
     num_retiros = models.IntegerField(null=False, blank=False)
+
 
     def __str__(self):
         return(self.nombre_plan)
@@ -23,7 +24,8 @@ class Cliente(models.Model):
     opCiudad = [("1", "La Serena"), ("2", "Coquimbo")]
     ciudad = models.CharField(max_length=20, blank=False, null=True, choices=opCiudad)
     fecha_entrega= models.DateField(null=True)
-    recurrencias =
+    rec = recurrence.fields.RecurrenceField(null=True)
+
 
     def __str__(self):
         return(self.nombre)

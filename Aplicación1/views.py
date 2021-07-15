@@ -27,6 +27,9 @@ def listaClientes(request):
     datos = {'listaClientes': Cliente.objects.all()}
     return render(request, 'clientes.html', datos)
 
+def inicio(request):
+    return render(request, 'home.html')
+
 def agregarClientes(request):
     if request.method == 'POST':
         formulario = ClienteForm(request.POST)
@@ -127,22 +130,4 @@ class listaEntregas(FilterView):
         model = Cliente
         fields = ['fecha_entrega']
 
-
-def render_pdf_view(request):
-    template_path = 'lista.html'
-    context = {'entregas': listaClientes }
-    # Create a Django response object, and specify content_type as pdf
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'filename="report.pdf"'
-    # find the template and render it.
-    template = get_template(template_path)
-    html = template.render(context)
-
-    # create a pdf
-    pisa_status = pisa.CreatePDF(
-       html, dest=response)
-    # if error then show some funy view
-    if pisa_status.err:
-       return HttpResponse('We had some errors <pre>' + html + '</pre>')
-    return response
 

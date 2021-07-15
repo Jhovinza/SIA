@@ -5,15 +5,16 @@
 
 {% block content %}
    <div class="container bg-white">
-     <form action=""enctype="multipart/form-data" method="POST">
+     <form action=""enctype="multipart/form-data" method="POST" class="post-form">
 
         {% csrf_token %}
-         {{ form.media }}
-
+        {{ form.media }}
+         <br>
         {{ form | crispy }}
 
         <button>Agregar Clientes</button>
 
     </form>
 </div>
+
 {% endblock %}
