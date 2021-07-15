@@ -1,4 +1,6 @@
+import recurrence
 from django.db import models
+from recurrence import *
 
 # Create your models here.
 class Plan_reciclaje(models.Model):
@@ -18,21 +20,27 @@ class Cliente(models.Model):
     telefono = models.IntegerField(null=False, blank=False)
     correo = models.CharField(max_length=50, null=True, blank=True)
     plan_reciclaje = models.ForeignKey(Plan_reciclaje, null=True, on_delete=models.SET_NULL)
+    opCiudad = [("1", "La Serena"), ("2", "Coquimbo")]
+    ciudad = models.CharField(max_length=20, blank=False, null=True, choices=opCiudad)
+    fecha_entrega= models.DateField(null=True)
+    recurrencias =
 
     def __str__(self):
-        return (self.id_cliente+" - "+self.nombre+" - "+self.rut+" - "+self.direccion+" - "+str(self.telefono)+" - "+self.correo+" - "+self.plan_reciclaje)
+        return(self.nombre)
+
 
 class Ficha_Plan(models.Model):
     id_ficha = models.BigAutoField(primary_key=True)
     info_cliente = models.ForeignKey(Cliente, null=True, on_delete=models.SET_NULL)
     info_plan = models.ForeignKey(Plan_reciclaje, null=True, on_delete=models.SET_NULL)
-    fecha_retiro = models.DateField(null=True, blank=True)
-    fecha_entrega= models.DateField(null=True, blank=True)
+    fecha_retiro = models.DateField(null=True, blank=False)
 
     def __str__(self):
-        return (self.id_ficha+" - "+self.info_cliente+" - "+self.info_plan+" - "+self.fecha_retiro+" - "+self.fecha_entrega)
+        return(str(self.info_cliente))
 
 class Reporte(models.Model):
     fecha = models.DateField(null=False, blank=False)
+
+
 
 

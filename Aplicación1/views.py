@@ -1,11 +1,23 @@
 # Create your views here.
+import django_filters
 from django.shortcuts import render, redirect
 
 from Aplicación1.form import *
 from Aplicación1.models import *
+from django.views.generic import View
+from django_filters.views import FilterView
+from .utils import render_to_pdf
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
 
-import calendar
-from calendar import HTMLCalendar
+from django.http import FileResponse
+import io
+import os
+from django.conf import settings
+
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+from django.contrib.staticfiles import finders
 
 
 def Aplicación1(request):
@@ -47,9 +59,6 @@ def agregarPlanes(request):
     datos = {'form': formulario}
     return render(request, 'agregarPlanes.html', datos)
 
-def archivoReportes(request):
-    datos = {'archivoReportes': Reporte.objects.all()}
-    return render(request, 'reportes.html', datos)
 
 def modificarClientes(request, id_cliente):
     cliente = Cliente.objects.get(id_cliente=id_cliente)
@@ -95,14 +104,45 @@ def eliminarPlanes(request, id_plan):
     planes.delete()
     return redirect('planes')
 
-def calendario(request, year, month):
-    month = month.capitalize()
-    month_num = list(calendar.month_name).index(month)
-    month_num = int(month)
+class filtroEntregas(django_filters.FilterSet):
+    fecha_entrega = django_filters.DateFilter()
 
-    cal = HTMLCalendar().formatmonth(year, month_num)
+    fecha_entrega = django_filters.DateFilter(
+        widget=forms.DateInput(
+            attrs={
+                'id': 'datepicker',
+                'type': 'date'
+            }
+        )
+    )
 
-    datos = {"year": year, "month": month, "month_num": month_num, "cal": cal}
+class listaEntregas(FilterView):
+    model = Cliente
+    template_name = 'entregas1.html'
+    context_object_name = 'entregas'
+    filterset_class = filtroEntregas
+    widgets = {'fecha_entrega': DateInput(attrs={'type': 'date'})}
 
-    return render(request, 'calendario.html', datos)
+    class Meta:
+        model = Cliente
+        fields = ['fecha_entrega']
+
+
+def render_pdf_view(request):
+    template_path = 'lista.html'
+    context = {'entregas': listaClientes }
+    # Create a Django response object, and specify content_type as pdf
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'filename="report.pdf"'
+    # find the template and render it.
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+       html, dest=response)
+    # if error then show some funy view
+    if pisa_status.err:
+       return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
 
